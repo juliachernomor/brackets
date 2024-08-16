@@ -1,31 +1,57 @@
-
-
-  function getKeyByValue(object, value) {//получаю ключ по значению
-    return Object.keys(object).find(key =>
-        object[key] === value);
-    }
+// module.exports = function check(str, bracketsConfig) {
+//     const getPairs = []
+//     bracketsConfig.forEach((bracket) => getPairs.push(bracket[0] + bracket[1]))
+//     while (getPairs.some((pair) =>  str.includes(pair) )) {
+//         getPairs.map((pair) => 
+//             str = str.replace(pair, '')
+//         )
+//     }
+//     return str? false:true 
+// }
 
 module.exports = function check(str, bracketsConfig) {
+    // let stack = [];
+    // for (let char of str) {
+    //     bracketsConfig.forEach((mass) => {
+    //         //символ строки равен открывающим скобкам
+    //         if (mass[0] === char && mass[1] !==char) {
+    //             stack.push(char);
+    //         }   //символ строки равен  скобкам одинаковым у откр и закр
+    //         else if(mass[1] === char && mass[0] === char){ 
+    //             if (stack.length ==0 || stack[stack.length - 1] !== char) 
+    //             { stack.push(char);}
+    //             else if (stack.length !==0 && stack[stack.length - 1] == char) {
+    //             stack.pop(char);
+    //             }
+    //         }//символ строки равен закрывающим скобкам
+    //         else if (mass[1] === char && mass[0] !== char) {
+    //             if (!stack.length || stack[stack.length - 1] !== mass[0]) return false;
+    //             stack.pop(char);
+    //         } 
+    //     });
+    // }
+    // return !stack.length;
     let stack = [];
-    let obj = Object.fromEntries(bracketsConfig);
     for (let char of str) {
-
-        for (let key in obj) {
-            if (key.localeCompare(char) == 0) {
-                stack.push(char)
-            }
-        }
-
-        for (let key in obj) {
-            if (obj[key].localeCompare(char) == 0) {
-                if (stack.length == 0 || stack.pop() !== getKeyByValue(obj, char)) {
-                    return false;
+        for (let mass of bracketsConfig) {
+            console.log(stack)
+            //символ строки равен открывающим скобкам
+            if (mass[0] === char && mass[1] !==char) {
+                stack.push(char);
+            }   //символ строки равен  скобкам одинаковым у откр и закр
+            else if(mass[1] === char && mass[0] === char){ 
+                if (stack.length ==0 || stack[stack.length - 1] !== char) 
+                { stack.push(char);}
+                else if (stack.length !==0 && stack[stack.length - 1] == char) {
+                stack.pop(char);
                 }
-            }
-        }
+            }//символ строки равен закрывающим скобкам
+            else if (mass[1] === char && mass[0] !== char) {
+                //если stack не пустой и  stack[stack.length - 1] !== mass[0] или stack пустой
+                if(!stack.length ||  stack[stack.length - 1] !== mass[0]) return false;
+                stack.pop(char);
+            } 
+        };
     }
-    if (stack.length == 0) {
-        return true
-    } else { 
-        return false }
-}
+    return !stack.length;
+}  
